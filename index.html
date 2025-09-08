@@ -1,0 +1,452 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Technical Bid Evaluator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap");
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: #f9fafb;
+      color: #111827;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-gray-50">
+  <header class="bg-white shadow p-4 flex items-center justify-between sticky top-0 z-10 relative">
+    <button
+      id="btn-home"
+      aria-label="Go to Home Page"
+      class="absolute left-4 text-indigo-600 font-semibold hover:underline focus:outline-none hidden"
+    >
+      &larr; Home
+    </button>
+    <h1 class="mx-auto text-2xl font-semibold tracking-wide text-center" id="page-title">
+      Home
+    </h1>
+    <div class="invisible w-16"></div> <!-- placeholder for right side spacing -->
+  </header>
+
+  <main class="flex-1 p-6 max-w-5xl mx-auto w-full">
+    <!-- Home Page -->
+    <section id="page-home" role="main" aria-label="Home Page">
+      <button
+        id="btn-create-new"
+        class="w-full bg-indigo-600 text-white rounded-md px-6 py-4 text-left text-xl font-semibold hover:bg-indigo-700 transition mb-8"
+        aria-label="Create New Bid"
+      >
+        + Create New Bid
+      </button>
+
+      <section aria-label="Previous Technical Bids" class="space-y-4">
+        <h2 class="text-lg font-semibold mb-4 text-gray-800">Previous Technical Bids</h2>
+
+        <ul class="space-y-4">
+          <li class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 flex items-center space-x-4">
+            <input
+              type="text"
+              value="Technical Bid 1"
+              class="flex-1 text-lg font-semibold border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              aria-label="Edit Technical Bid 1 name"
+              spellcheck="false"
+            />
+            <button
+              class="text-indigo-600 font-semibold hover:underline focus:outline-none btn-open-dashboard"
+              aria-label="Open Technical Bid 1 Dashboard"
+              data-bid="Technical Bid 1"
+            >
+              Open
+            </button>
+          </li>
+
+          <li class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 flex items-center space-x-4">
+            <input
+              type="text"
+              value="Technical Bid 2"
+              class="flex-1 text-lg font-semibold border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              aria-label="Edit Technical Bid 2 name"
+              spellcheck="false"
+            />
+            <button
+              class="text-indigo-600 font-semibold hover:underline focus:outline-none btn-open-dashboard"
+              aria-label="Open Technical Bid 2 Dashboard"
+              data-bid="Technical Bid 2"
+            >
+              Open
+            </button>
+          </li>
+
+          <li class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 flex items-center space-x-4">
+            <input
+              type="text"
+              value="Technical Bid 3"
+              class="flex-1 text-lg font-semibold border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              aria-label="Edit Technical Bid 3 name"
+              spellcheck="false"
+            />
+            <button
+              class="text-indigo-600 font-semibold hover:underline focus:outline-none btn-open-dashboard"
+              aria-label="Open Technical Bid 3 Dashboard"
+              data-bid="Technical Bid 3"
+            >
+              Open
+            </button>
+          </li>
+        </ul>
+      </section>
+    </section>
+
+    <!-- Create New Bid Page -->
+    <section id="page-create-new" class="hidden" role="main" aria-label="Create New Bid Page">
+      <h2 class="text-3xl font-semibold mb-6 text-center">Create New Bid</h2>
+
+      <form id="create-new-form" class="space-y-8 max-w-3xl mx-auto">
+        <div>
+          <label for="project-name" class="block text-lg font-medium mb-2">Project Name</label>
+          <input
+            type="text"
+            id="project-name"
+            name="project-name"
+            placeholder="Enter project name"
+            class="w-full border border-gray-300 rounded-md px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block text-lg font-medium mb-2">Technical Specification</label>
+          <input
+            type="file"
+            id="tech-spec-upload"
+            name="tech-spec-upload"
+            accept=".pdf,.xls,.xlsx"
+            class="block w-full text-gray-700"
+          />
+          <button
+            type="button"
+            id="btn-upload-tech-spec"
+            class="mt-3 bg-indigo-600 text-white px-5 py-3 rounded-md font-semibold hover:bg-indigo-700 transition"
+          >
+            Upload Technical Specification
+          </button>
+        </div>
+
+        <div>
+          <label class="block text-lg font-medium mb-2">Vendor Details</label>
+          <input
+            type="file"
+            id="vendor-details-upload"
+            name="vendor-details-upload"
+            accept=".pdf,.xls,.xlsx"
+            class="block w-full text-gray-700"
+          />
+          <button
+            type="button"
+            id="btn-upload-vendor-details"
+            class="mt-3 bg-indigo-600 text-white px-5 py-3 rounded-md font-semibold hover:bg-indigo-700 transition"
+          >
+            Upload Vendor Details
+          </button>
+        </div>
+
+        <div id="vendors-container" class="space-y-6">
+          <button
+            type="button"
+            class="vendor-btn w-full bg-white rounded-lg shadow-sm border border-gray-200 p-5 text-left text-xl font-semibold hover:bg-indigo-50 transition"
+            aria-label="Open Vendor 1 Details"
+            id="btn-vendor-1"
+          >
+            Vendor 1
+          </button>
+        </div>
+
+        <button
+          type="button"
+          id="btn-add-vendor"
+          class="w-full bg-green-600 text-white rounded-md px-6 py-3 text-center text-lg font-semibold hover:bg-green-700 transition"
+          aria-label="Add Vendor"
+        >
+          + Add Vendor
+        </button>
+      </form>
+    </section>
+
+    <!-- Dashboard Page -->
+    <section id="page-dashboard" class="hidden" role="main" aria-label="Technical Bid Dashboard">
+      <h2 class="text-3xl font-semibold mb-8 text-center" id="dashboard-title">Technical Bid 1</h2>
+
+      <!-- Technical Specification Section -->
+      <section aria-labelledby="tech-spec-title" class="bg-white rounded-lg shadow p-6 mb-8">
+        <h3 id="tech-spec-title" class="text-xl font-semibold mb-4">Technical Specification</h3>
+        <div class="flex flex-wrap gap-4">
+          <button
+            type="button"
+            class="bg-indigo-600 text-white px-5 py-3 rounded-md font-semibold hover:bg-indigo-700 transition flex-1 min-w-[140px]"
+          >
+            Open File
+          </button>
+          <button
+            type="button"
+            class="bg-gray-100 text-gray-800 px-5 py-3 rounded-md font-semibold hover:bg-gray-200 transition flex-1 min-w-[180px]"
+          >
+            + Upload New Revision
+          </button>
+        </div>
+      </section>
+
+      <!-- Vendor Details Section -->
+      <section aria-labelledby="vendor-details-title" class="bg-white rounded-lg shadow p-6 mb-8">
+        <h3 id="vendor-details-title" class="text-xl font-semibold mb-4">Vendor Details</h3>
+        <button
+          type="button"
+          class="bg-indigo-600 text-white px-5 py-3 rounded-md font-semibold hover:bg-indigo-700 transition w-full max-w-xs"
+        >
+          Open File
+        </button>
+      </section>
+
+      <!-- Status of Vendors Section -->
+      <section aria-labelledby="status-vendors-title" class="bg-white rounded-lg shadow p-6 mb-8">
+        <h3 id="status-vendors-title" class="text-xl font-semibold mb-6">Status of Vendors</h3>
+
+        <button
+          type="button"
+          class="bg-gray-100 text-gray-800 px-5 py-3 rounded-md font-semibold hover:bg-gray-200 transition mb-8 w-full max-w-xs"
+        >
+          Status of Vendors
+        </button>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <button
+            type="button"
+            class="bg-white shadow rounded-lg p-6 flex flex-col items-center justify-center hover:shadow-lg transition"
+            aria-label="Vendor 1 Status"
+          >
+            <h4 class="text-lg font-semibold mb-2">Vendor 1</h4>
+            <p class="text-gray-600 text-sm">Status: Pending</p>
+          </button>
+
+          <button
+            type="button"
+            class="bg-white shadow rounded-lg p-6 flex flex-col items-center justify-center hover:shadow-lg transition"
+            aria-label="Vendor 2 Status"
+          >
+            <h4 class="text-lg font-semibold mb-2">Vendor 2</h4>
+            <p class="text-gray-600 text-sm">Status: Submitted</p>
+          </button>
+
+          <button
+            type="button"
+            class="bg-white shadow rounded-lg p-6 flex flex-col items-center justify-center hover:shadow-lg transition"
+            aria-label="Vendor 3 Status"
+          >
+            <h4 class="text-lg font-semibold mb-2">Vendor 3</h4>
+            <p class="text-gray-600 text-sm">Status: Reviewed</p>
+          </button>
+        </div>
+      </section>
+
+      <!-- Generate Comparison Button -->
+      <section class="max-w-5xl mx-auto px-6">
+        <button
+          type="button"
+          class="w-full bg-green-600 text-white text-xl font-semibold rounded-md py-4 hover:bg-green-700 transition"
+        >
+          Generate Technical Comparison
+        </button>
+      </section>
+    </section>
+
+    <!-- Vendor Details Page -->
+    <section id="page-vendor-details" class="hidden" role="main" aria-label="Vendor Details Page">
+      <div class="max-w-3xl mx-auto space-y-8">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-3xl font-semibold" id="vendor-title">Vendor 1</h2>
+          <button
+            id="btn-back-to-upload"
+            class="text-indigo-600 font-semibold hover:underline focus:outline-none"
+            aria-label="Back to Create New Bid Page"
+          >
+            &larr; Back
+          </button>
+        </div>
+
+        <div>
+          <label for="vendor-tech-upload" class="block text-lg font-medium mb-2">Upload Technical Offer</label>
+          <input
+            type="file"
+            id="vendor-tech-upload"
+            accept=".pdf,.xls,.xlsx"
+            class="block w-full text-gray-700 mb-4"
+          />
+          <button
+            type="button"
+            id="btn-upload-vendor-tech"
+            class="bg-indigo-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-indigo-700 transition w-full"
+          >
+            Upload Technical Offer
+          </button>
+        </div>
+
+        <button
+          type="button"
+          id="btn-generate-comparison"
+          class="w-full bg-green-600 text-white rounded-md px-6 py-3 text-center text-lg font-semibold hover:bg-green-700 transition"
+        >
+          Generate Comparison
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-white shadow-inner p-4 text-center text-sm text-gray-500">
+    &copy; 2024 Technical Bid Evaluator
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const pageHome = document.getElementById("page-home");
+      const pageCreateNew = document.getElementById("page-create-new");
+      const pageDashboard = document.getElementById("page-dashboard");
+      const pageVendorDetails = document.getElementById("page-vendor-details");
+      const pageTitle = document.getElementById("page-title");
+      const btnHome = document.getElementById("btn-home");
+      const btnCreateNew = document.getElementById("btn-create-new");
+      const btnVendor1 = document.getElementById("btn-vendor-1");
+      const btnBackToUpload = document.getElementById("btn-back-to-upload");
+      const btnAddVendor = document.getElementById("btn-add-vendor");
+      const vendorsContainer = document.getElementById("vendors-container");
+      const openBidButtons = document.querySelectorAll(".btn-open-bid");
+      const openDashboardButtons = document.querySelectorAll(".btn-open-dashboard");
+
+      // Show Create New Bid page
+      btnCreateNew.addEventListener("click", () => {
+        pageHome.classList.add("hidden");
+        pageCreateNew.classList.remove("hidden");
+        pageDashboard.classList.add("hidden");
+        pageVendorDetails.classList.add("hidden");
+        pageTitle.textContent = "Create New Bid";
+        btnHome.classList.remove("hidden");
+        document.getElementById("project-name").focus();
+      });
+
+      // Return to Home page
+      btnHome.addEventListener("click", () => {
+        pageCreateNew.classList.add("hidden");
+        pageDashboard.classList.add("hidden");
+        pageVendorDetails.classList.add("hidden");
+        pageHome.classList.remove("hidden");
+        pageTitle.textContent = "Home";
+        btnHome.classList.add("hidden");
+        btnCreateNew.focus();
+      });
+
+      // Open buttons for previous bids open Create New Bid page (for demo)
+      openBidButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          pageHome.classList.add("hidden");
+          pageCreateNew.classList.remove("hidden");
+          pageDashboard.classList.add("hidden");
+          pageVendorDetails.classList.add("hidden");
+          pageTitle.textContent = "Create New Bid";
+          btnHome.classList.remove("hidden");
+          document.getElementById("project-name").focus();
+        });
+      });
+
+      // Open dashboard page for previous bids
+      openDashboardButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const li = btn.closest("li");
+          const input = li.querySelector("input[type=text]");
+          const bidName = input.value.trim() || btn.dataset.bid || "Technical Bid";
+
+          pageHome.classList.add("hidden");
+          pageCreateNew.classList.add("hidden");
+          pageDashboard.classList.remove("hidden");
+          pageVendorDetails.classList.add("hidden");
+          pageTitle.textContent = bidName;
+          document.getElementById("dashboard-title").textContent = bidName;
+          btnHome.classList.remove("hidden");
+        });
+      });
+
+      // Vendor 1 button opens vendor details page
+      btnVendor1.addEventListener("click", () => {
+        pageCreateNew.classList.add("hidden");
+        pageDashboard.classList.add("hidden");
+        pageVendorDetails.classList.remove("hidden");
+        pageTitle.textContent = "Vendor 1";
+        document.getElementById("vendor-tech-upload").focus();
+        btnHome.classList.remove("hidden");
+      });
+
+      // Back button from vendor details to create new bid page
+      btnBackToUpload.addEventListener("click", () => {
+        pageVendorDetails.classList.add("hidden");
+        pageCreateNew.classList.remove("hidden");
+        pageDashboard.classList.add("hidden");
+        pageTitle.textContent = "Create New Bid";
+        btnVendor1.focus();
+      });
+
+      // Add vendor button functionality
+      btnAddVendor.addEventListener("click", () => {
+        const vendorCount = vendorsContainer.querySelectorAll(".vendor-btn").length;
+        const newVendorNumber = vendorCount + 1;
+
+        const newVendorBtn = document.createElement("button");
+        newVendorBtn.type = "button";
+        newVendorBtn.className = "vendor-btn w-full bg-white rounded-lg shadow-sm border border-gray-200 p-5 text-left text-xl font-semibold hover:bg-indigo-50 transition";
+        newVendorBtn.setAttribute("aria-label", `Open Vendor ${newVendorNumber} Details`);
+        newVendorBtn.textContent = `Vendor ${newVendorNumber}`;
+
+        newVendorBtn.addEventListener("click", () => {
+          pageCreateNew.classList.add("hidden");
+          pageDashboard.classList.add("hidden");
+          pageVendorDetails.classList.remove("hidden");
+          pageTitle.textContent = `Vendor ${newVendorNumber}`;
+          document.getElementById("vendor-tech-upload").focus();
+          btnHome.classList.remove("hidden");
+        });
+
+        vendorsContainer.appendChild(newVendorBtn);
+        newVendorBtn.focus();
+      });
+
+      // Upload buttons alert (optional)
+      document.getElementById("btn-upload-tech-spec").addEventListener("click", () => {
+        const input = document.getElementById("tech-spec-upload");
+        if (input.files.length === 0) {
+          alert("Please select a file to upload for Technical Specification.");
+          return;
+        }
+        alert(`Uploading Technical Specification: ${input.files[0].name}`);
+      });
+
+      document.getElementById("btn-upload-vendor-details").addEventListener("click", () => {
+        const input = document.getElementById("vendor-details-upload");
+        if (input.files.length === 0) {
+          alert("Please select a file to upload for Vendor Details.");
+          return;
+        }
+        alert(`Uploading Vendor Details: ${input.files[0].name}`);
+      });
+
+      document.getElementById("btn-upload-vendor-tech").addEventListener("click", () => {
+        const input = document.getElementById("vendor-tech-upload");
+        if (input.files.length === 0) {
+          alert("Please select a file to upload for Vendor Technical Offer.");
+          return;
+        }
+        alert(`Uploading Vendor Technical Offer: ${input.files[0].name}`);
+      });
+
+      document.getElementById("btn-generate-comparison").addEventListener("click", () => {
+        alert("Generating comparison...");
+      });
+    });
+  </script>
+</body>
+</html>
